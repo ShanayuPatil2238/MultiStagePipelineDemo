@@ -18,6 +18,14 @@ stages:
       inputs:
         packageType: 'sdk'
         version: '10.x'
+    - task: SonarCloudPrepare@3
+      displayName: 'Prepare SonarCloud Analysis'
+      inputs:
+        SonarCloud: 'SonarQube Cloud'
+        organization: 'ShanayuPatil2238'
+        scannerMode: 'dotnet'
+        projectKey: 'df70d257e7a5cbe05473ff69142046cd82a30525'
+        projectName: 'MultiStagePipelineDemo'
 
     - script: dotnet restore
       displayName: Restore Packages
@@ -25,9 +33,16 @@ stages:
     - script: dotnet build --configuration $(buildConfiguration)
       displayName: Build Application
 
+    - task: SonarCloudAnalyze@3
+      displayName: 'Run SonarCloud Analysis'
+
     - script: dotnet publish --configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)
       displayName: Publish Application
 
+    - task: SonarCloudPublish@3
+      displayName: 'Publish Quality Gate Result'
+      inputs:
+        pollingTimeoutSec: '300'
     - task: PublishBuildArtifacts@1
       inputs:
         PathtoPublish: '$(Build.ArtifactStagingDirectory)'
