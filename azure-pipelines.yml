@@ -38,49 +38,55 @@ stages:
   displayName: Deploy to Dev
   dependsOn: Build
   jobs:
-    - job: DevDeploy
-      steps:
-        - script: echo "Deploying to Development Environment"
-          displayName: Deploy Dev
+    - deployment: DevDeploy
+      displayName: Deploy Dev
+      environment: Dev
+
+      strategy:
+        runOnce:
+          deploy:
+            steps:
+              - download: current
+                artifact: drop
+
+              - script: 
+                  echo "Deploying to Development Environment..."
+                  dir $(Pipeline.Workspace)
+                displayName: Deploy Application
+
 
 - stage: QA
   displayName: Deploy to QA
   dependsOn: Dev
   jobs:
-    - job: QADeploy
-      steps:
-        - script: echo "Deploying to QA Environment"
-          displayName: Deploy QA
+    - deployment: DeployQA
+      displayName: Deploy to QA
+      environment: QA
+
+      strategy:
+        runOnce:
+          deploy:
+            steps:
+              - download: current
+                artifact: drop
+
+              - script: echo "Deploying to QA Environment"
+                displayName: Deploy Application
 
 - stage: Production
   displayName: Deploy to Production
   dependsOn: QA
   jobs:
-    - job: ProdDeploy
-      steps:
-        - script: echo "Deploying to Production Environment"
-          displayName: Deploy Production
+    - deployment: DeployProd
+      displayName: Deploy to Production
+      environment: Production
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+      strategy:
+        runOnce:
+          deploy:
+            steps:
+              - download: current
+                artifact: drop
+              - script:
+                  echo "Deploying to Production Environment"
+                displayName: Deploy Production
