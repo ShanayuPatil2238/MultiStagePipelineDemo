@@ -24,7 +24,7 @@ stages:
         SonarCloud: 'SonarQube Cloud'
         organization: 'ShanayuPatil2238'
         scannerMode: 'dotnet'
-        projectKey: 'df70d257e7a5cbe05473ff69142046cd82a30525'
+        projectKey: 'ShanayuPatil2238_MultiStagePipelineDemo'
         projectName: 'MultiStagePipelineDemo'
 
     - script: dotnet restore
