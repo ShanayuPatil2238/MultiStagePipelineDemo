@@ -1,0 +1,58 @@
+trigger:
+- main
+
+pool:
+  vmImage: windows-latest
+
+variables:
+  buildConfiguration: 'Release'
+
+stages:
+
+- stage: Build
+  jobs:
+  - job: Build
+    steps: 
+    - task: UseDotNet@2
+      inputs:
+        packageType: 'sdk'
+        version: '10.x'
+
+    - script: dotnet restore
+      displayName:'Restore Packages'
+
+    - script: dotnet build --configuration $(buildConfiguration)
+      displayName: 'Build Application'
+
+    - script: dotnet publish --configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)
+      displayName: 'Publish Application'
+
+    - task: PublishBuildArtifacts@1
+      inputs:
+        PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+        ArtifactName: 'drop'
+        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
