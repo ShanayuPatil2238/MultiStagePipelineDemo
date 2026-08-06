@@ -56,15 +56,9 @@ stages:
       displayName: 'Trivy Filesystem Scan'
 
     - powershell: |
-        Invoke-WebRequest `
-          -Uri https://raw.githubusercontent.com/aquasecurity/trivy/master/contrib/html.tpl `
-          -OutFile html.tpl
+        Invoke-WebRequest -Uri "https://raw.githubusercontent.com/aquasecurity/trivy/master/contrib/html.tpl" -OutFile "html.tpl"
 
-        trivy fs `
-          --format template `
-          --template "@html.tpl" `
-          -o trivy-report.html ` 
-          . 
+        trivy fs --format template --template "@html.tpl" -o trivy-report.html . 
         displayName:'Generate trivy HTML Report'
     
     - task: PublishBuildArtifacts@1
