@@ -43,11 +43,24 @@ stages:
       displayName: 'Publish Quality Gate Result'
       inputs:
         pollingTimeoutSec: '300'
+
+    - powershell: |
+        choco install trivy -y 
+      displayName: 'Install Trivy'
+
+    - script: trivy --version
+      displayName: 'Verify Trivy'
+
+    - script: |
+        trivy fs .
+      displayName: 'Trivy Filesystem Scan'
+
     - task: PublishBuildArtifacts@1
       inputs:
         PathtoPublish: '$(Build.ArtifactStagingDirectory)'
         ArtifactName: 'drop'
         publishLocation: 'Container'
+
 
 - stage: Dev
   displayName: Deploy to Dev
