@@ -1,0 +1,21 @@
+trigger: none
+
+pool:
+  name: Azure Virtual Machine Scale Set
+
+steps:
+- script: |
+    echo "Pipeline 2 starting on agent: $AGENT_NAME"
+    hostname
+    date
+  displayName: 'Show agent info'
+
+- script: |
+    echo "Simulating work for 90 seconds..."
+    sleep 90
+  displayName: 'Simulated workload'
+
+- script: |
+    echo "Pipeline 2 finished on agent: $AGENT_NAME"
+    date
+  displayName: 'Done'
